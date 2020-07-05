@@ -12,11 +12,20 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Stripe.net" Version="37.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Restaurant.DataAccess\Restaurant.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Admin\FoodTypes\" />
+    <Folder Include="Pages\Admin\MenuItems\" />
+    <Folder Include="Pages\Admin\Users\" />
+    <Folder Include="Pages\Customer\Home\" />
+    <Folder Include="Pages\Customer\Cart\" />
   </ItemGroup>
 
 </Project>

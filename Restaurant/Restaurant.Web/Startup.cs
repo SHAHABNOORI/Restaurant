@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Restaurant.DataAccess;
+using Restaurant.DataAccess.Data.UnitOfWork.Contract;
+using Restaurant.DataAccess.Data.UnitOfWork.Implementation;
 
 namespace Restaurant.Web
 {
@@ -28,6 +30,8 @@ namespace Restaurant.Web
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
@@ -54,7 +58,7 @@ namespace Restaurant.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

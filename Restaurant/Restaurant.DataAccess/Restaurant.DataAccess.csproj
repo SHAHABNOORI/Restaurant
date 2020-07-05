@@ -12,7 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Initializer\" />
+    <Folder Include="Data\Initializer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Restaurant.Models\Restaurant.Models.csproj" />
   </ItemGroup>
 
 </Project>
