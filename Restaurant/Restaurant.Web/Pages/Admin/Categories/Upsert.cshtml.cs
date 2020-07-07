@@ -1,30 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
 using Restaurant.Models;
+using Restaurant.Web.ViewModels;
 
 namespace Restaurant.Web.Pages.Admin.Categories
 {
     public class UpsertModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         [BindProperty]
-        public Category CategoryObj { get; set; }
+        public CategoryViewModel CategoryObj { get; set; }
 
-        public UpsertModel(IUnitOfWork unitOfWork)
+        public UpsertModel(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public IActionResult OnGet(int? id)
+        public IActionResult OnGet(Guid? id)
         {
-            CategoryObj = new Category();
+            CategoryObj = new CategoryViewModel();
 
             if (id == null) return Page();
 
-            CategoryObj =
+            var categoryFromDb =
                 _unitOfWork.CategoryRepository.GetFirstOrDefault(category => category.Id == id.GetValueOrDefault());
+
+            _mapper.Map(categoryFromDb, CategoryObj);
 
             if (CategoryObj == null)
                 return NotFound();
@@ -39,13 +46,14 @@ namespace Restaurant.Web.Pages.Admin.Categories
                 return Page();
             }
 
-            if (CategoryObj.Id == 0)
+            var category = new Category();
+            if (CategoryObj.Id == Guid.Empty || CategoryObj.Id == default)
             {
-                _unitOfWork.CategoryRepository.Add(CategoryObj);
+                _unitOfWork.CategoryRepository.Add(_mapper.Map(CategoryObj, category));
             }
             else
             {
-                _unitOfWork.CategoryRepository.Update(CategoryObj);
+                _unitOfWork.CategoryRepository.Update(_mapper.Map(CategoryObj, category));
             }
             _unitOfWork.Save();
             return RedirectToPage("./Index");

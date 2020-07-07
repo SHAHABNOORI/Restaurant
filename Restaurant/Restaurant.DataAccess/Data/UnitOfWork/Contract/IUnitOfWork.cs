@@ -7,6 +7,10 @@ namespace Restaurant.DataAccess.Data.UnitOfWork.Contract
     {
         ICategoryRepository CategoryRepository{ get; }
 
+        IFoodTypeRepository FoodTypeRepository{ get; }
+
+        IMenuItemRepository MenuItemRepository{ get; }
+
         void Save();
     }
 }

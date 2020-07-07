@@ -1,18 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 
 namespace Restaurant.Models
 {
-    public class Category
+    public class Category : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
-        [Display(Name = "Category Name")]
         public string Name { get; set; }
 
-        [Required]
-        [Display(Name = "Display Order")]
         public int DisplayOrder { get; set; }
+
+        public ICollection<MenuItem> MenuItems { get; set; }
     }
 }

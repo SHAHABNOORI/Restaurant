@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
 
 namespace Restaurant.Web.Controllers
@@ -21,7 +22,7 @@ namespace Restaurant.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             var objFromDb = _unitOfWork.CategoryRepository.GetFirstOrDefault(category => category.Id == id);
             if (objFromDb == null)
