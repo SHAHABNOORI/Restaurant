@@ -5,20 +5,20 @@ using System.Linq.Expressions;
 
 namespace Restaurant.DataAccess.Data.Repository.Contract
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity, in TKey> where TEntity : class
     {
-        T Get(int id);
+        TEntity Get(TKey id);
 
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null);
+        IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = null);
 
-        T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null);
+        TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> filter = null, string includeProperties = null);
 
-        void Add(T entity);
+        void Add(TEntity entity);
 
-        void Remove(int id);
+        void Remove(TKey id);
 
-        void Remove(T entity);
+        void Remove(TEntity entity);
 
-        void RemoveRange(IEnumerable<T> entity);
+        void RemoveRange(IEnumerable<TEntity> entity);
     }
 }

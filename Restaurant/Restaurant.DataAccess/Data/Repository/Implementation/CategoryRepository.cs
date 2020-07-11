@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Restaurant.DataAccess.Data.Repository.Contract;
@@ -6,7 +7,7 @@ using Restaurant.Models;
 
 namespace Restaurant.DataAccess.Data.Repository.Implementation
 {
-    public class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class CategoryRepository : Repository<Category, Guid>, ICategoryRepository
     {
         private readonly ApplicationDbContext _db;
 

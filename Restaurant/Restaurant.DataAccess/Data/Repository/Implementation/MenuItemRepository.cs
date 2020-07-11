@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Restaurant.DataAccess.Data.Repository.Contract;
 using Restaurant.Models;
 
 namespace Restaurant.DataAccess.Data.Repository.Implementation
 {
-    public class MenuItemRepository : Repository<MenuItem>, IMenuItemRepository
+    public class MenuItemRepository : Repository<MenuItem, Guid>, IMenuItemRepository
     {
         private readonly ApplicationDbContext _db;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
 
@@ -16,15 +17,15 @@ namespace Restaurant.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Json(new { data = _unitOfWork.FoodTypeRepository.GetAll() });
+            return Json(new { data = await _unitOfWork.FoodTypeRepository.GetAllAsync() });
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var objFromDb = _unitOfWork.FoodTypeRepository.GetFirstOrDefault(foodType => foodType.Id == id);
+            var objFromDb = await _unitOfWork.FoodTypeRepository.GetFirstOrDefaultAsync(foodType => foodType.Id == id);
             if (objFromDb == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
