@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,14 +23,14 @@ namespace Restaurant.Web.Pages.Admin.FoodTypes
             _mapper = mapper;
         }
 
-        public IActionResult OnGet(Guid? id)
+        public async Task<IActionResult> OnGet(Guid? id)
         {
             FoodTypeObj = new FoodTypeViewModel();
 
             if (id == null) return Page();
 
             var foodTypeFromDb =
-                _unitOfWork.FoodTypeRepository.GetFirstOrDefault(foodType => foodType.Id == id.GetValueOrDefault());
+              await _unitOfWork.FoodTypeRepository.GetFirstOrDefaultAsync(foodType => foodType.Id == id.GetValueOrDefault());
 
             _mapper.Map(foodTypeFromDb, FoodTypeObj);
 
@@ -39,7 +40,7 @@ namespace Restaurant.Web.Pages.Admin.FoodTypes
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
@@ -49,13 +50,13 @@ namespace Restaurant.Web.Pages.Admin.FoodTypes
             var foodType = new FoodType();
             if (FoodTypeObj.Id == Guid.Empty || FoodTypeObj.Id == default)
             {
-                _unitOfWork.FoodTypeRepository.Add(_mapper.Map(FoodTypeObj, foodType));
+                await _unitOfWork.FoodTypeRepository.AddAsync(_mapper.Map(FoodTypeObj, foodType));
             }
             else
             {
-                _unitOfWork.FoodTypeRepository.Update(_mapper.Map(FoodTypeObj, foodType));
+                await _unitOfWork.FoodTypeRepository.UpdateAsync(_mapper.Map(FoodTypeObj, foodType));
             }
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return RedirectToPage("./Index");
         }
     }

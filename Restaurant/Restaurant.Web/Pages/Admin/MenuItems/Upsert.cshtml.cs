@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,44 +28,79 @@ namespace Restaurant.Web.Pages.Admin.MenuItems
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult OnGet(Guid? id)
+        public async Task<IActionResult> OnGet(Guid? id)
         {
-            //var categoryList = DropDownHelper.Get(await _unitOfWorkAsync.CategoryRepositoryAsync.GetAllAsync(), "Name", "Id"); ;
-            //var foodTypeList = DropDownHelper.Get(await _unitOfWorkAsync.FoodTypeRepositoryAsync.GetAllAsync(), "Name", "Id"); ;
+            var categoryList = DropDownHelper.Get(await _unitOfWork.CategoryRepository.GetAllAsync(), nameof(Category.Name), nameof(Category.Id));
+            var foodTypeList = DropDownHelper.Get(await _unitOfWork.FoodTypeRepository.GetAllAsync(), nameof(FoodType.Name), nameof(FoodType.Id));
 
-            MenuItemObj = new MenuItemIndexPageViewModel();
+            MenuItemObj = new MenuItemIndexPageViewModel()
+            {
+                CategoryList = categoryList,
+                FoodTypeList = foodTypeList
+            };
 
-            if (id == null) return Page();
+            if (id == Guid.Empty || id == default) return Page();
+            var menuItemFromDb =
+                await _unitOfWork.MenuItemRepository.
+                    GetFirstOrDefaultAsync(menuItem => menuItem.Id == id.GetValueOrDefault());
 
-            var categoryFromDb =
-                _unitOfWork.CategoryRepository.GetFirstOrDefault(category => category.Id == id.GetValueOrDefault());
-
-            _mapper.Map(categoryFromDb, MenuItemObj);
+            _mapper.Map(menuItemFromDb, MenuItemObj.MenuItem);
 
             if (MenuItemObj == null)
+            {
                 return NotFound();
+            }
 
             return Page();
         }
 
-        public IActionResult OnPost(/*Category categoryObj*/)
+        public async Task<IActionResult> OnPost()
         {
+            var webRootPath = _webHostEnvironment.WebRootPath;
+
+            // Get Sended Files 
+            var files = HttpContext.Request.Form.Files;
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            var selectedCategory = await _unitOfWork.CategoryRepository.GetAsync(MenuItemObj.MenuItem.CategoryId);
+            var selectedFoodType = await _unitOfWork.FoodTypeRepository.GetAsync(MenuItemObj.MenuItem.FoodTypeId);
+            var menuItem = new MenuItem { Category = selectedCategory, FoodType = selectedFoodType };
+            if (MenuItemObj.MenuItem.Id == Guid.Empty || MenuItemObj.MenuItem.Id == default)
+            {
 
-            var category = new Category();
-            //if (MenuItemObj.Id == Guid.Empty || MenuItemObj.Id == default)
-            //{
-            //    _unitOfWork.CategoryRepository.Add(_mapper.Map(MenuItemObj, category));
-            //}
-            //else
-            //{
-            //    _unitOfWork.CategoryRepository.Update(_mapper.Map(MenuItemObj, category));
-            //}
-            _unitOfWork.Save();
+                var (fileName, extension) = await FileHelper.CreateImageFile(webRootPath, files, @"images\menuItems");
+                MenuItemObj.MenuItem.Image = @"\images\menuItems\" + fileName + extension;
+                await _unitOfWork.MenuItemRepository.AddAsync(_mapper.Map(MenuItemObj.MenuItem, menuItem));
+            }
+            else
+            {
+                var objFromDb = await _unitOfWork.MenuItemRepository.GetAsync(MenuItemObj.MenuItem.Id);
+                if (files.Count > 0)
+                {
+                    // Remove Current Image
+                    var currentImagePath = Path.Combine(webRootPath, objFromDb.Image.TrimStart('\\'));
+                    if (System.IO.File.Exists(currentImagePath))
+                    {
+                        System.IO.File.Delete(currentImagePath);
+                    }
+
+                    var (fileName, extension) = await FileHelper.CreateImageFile(webRootPath, files, @"images\menuItems");
+                    MenuItemObj.MenuItem.Image = @"\images\menuItems\" + fileName + extension;
+                }
+                else
+                {
+                    MenuItemObj.MenuItem.Image = objFromDb.Image;
+                }
+
+                await _unitOfWork.MenuItemRepository.UpdateAsync(_mapper.Map(MenuItemObj.MenuItem, menuItem));
+            }
+            await _unitOfWork.SaveAsync();
             return RedirectToPage("./Index");
         }
     }
 }
+
+

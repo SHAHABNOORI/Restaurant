@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -39,7 +40,7 @@ namespace Restaurant.Web.Pages.Admin.Categories
             return Page();
         }
 
-        public IActionResult OnPost(/*Category categoryObj*/)
+        public async Task<IActionResult> OnPost(/*Category categoryObj*/)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +56,7 @@ namespace Restaurant.Web.Pages.Admin.Categories
             {
                 _unitOfWork.CategoryRepository.Update(_mapper.Map(CategoryObj, category));
             }
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return RedirectToPage("./Index");
         }
     }

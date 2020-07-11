@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Restaurant.DataAccess.Data.Repository.Contract;
 
 namespace Restaurant.DataAccess.Data.UnitOfWork.Contract
@@ -12,5 +13,6 @@ namespace Restaurant.DataAccess.Data.UnitOfWork.Contract
         IMenuItemRepository MenuItemRepository{ get; }
 
         void Save();
+        Task SaveAsync();
     }
 }

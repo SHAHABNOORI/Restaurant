@@ -1,4 +1,5 @@
-﻿using Restaurant.DataAccess.Data.Repository.Contract;
+﻿using System.Threading.Tasks;
+using Restaurant.DataAccess.Data.Repository.Contract;
 using Restaurant.DataAccess.Data.Repository.Implementation;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
 
@@ -27,7 +28,12 @@ namespace Restaurant.DataAccess.Data.UnitOfWork.Implementation
 
         public void Save()
         {
-            _db.SaveChanges();
+
+        }
+
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
         }
     }
 }

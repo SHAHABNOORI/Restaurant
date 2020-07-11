@@ -15,7 +15,7 @@ namespace Restaurant.Web.ViewModels
         public string Image { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Price should be greater than $1")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Display(Name = "Category")]
         public Guid CategoryId { get; set; }

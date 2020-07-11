@@ -31,7 +31,7 @@ namespace Restaurant.Web.Controllers
                 return Json(new { success = false, message = "Error while deleting" });
             }
             _unitOfWork.CategoryRepository.Remove(objFromDb);
-            _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
             return Json(new { success = true, message = "Delete Successful" });
         }
     }

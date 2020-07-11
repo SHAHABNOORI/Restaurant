@@ -17,6 +17,6 @@ namespace Restaurant.DataAccess.Data.Repository.Contract
         Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null,
             string includeProperties = null);
 
-        void AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
     }
 }

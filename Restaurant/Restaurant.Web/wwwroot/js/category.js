@@ -20,7 +20,7 @@ function loadList() {
                                 <a href="/Admin/categories/upsert?id=${data}" class="btn btn-success text-white" style="cussor:pointer; width:100px;">
                                     <i class="far fa-edit"></i> Edit
                                 </a>
-                                <a class="btn btn-danger text-white" style="cursor:pointer; width:100px;" onclick=Delete('/api/category/'+${data})>
+                                <a class="btn btn-danger text-white" style="cursor:pointer; width:100px;" onclick=Delete('/api/category/${data}')>
                                     <i class="far fa-trash-alt"></i> Delete
                                 </a>
                     </div>`;
@@ -35,6 +35,7 @@ function loadList() {
 }
 
 function Delete(url) {
+    debugger 
     swal({
         title: "Are you sure you want to Delete?",
         text: "You will not be able to restore the data!",

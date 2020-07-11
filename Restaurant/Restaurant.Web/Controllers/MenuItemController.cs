@@ -42,7 +42,7 @@ namespace Restaurant.Web.Controllers
                     System.IO.File.Delete(imagePath);
 
                 _unitOfWork.MenuItemRepository.Remove(objFromDb);
-                _unitOfWork.Save();
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception e)
             {

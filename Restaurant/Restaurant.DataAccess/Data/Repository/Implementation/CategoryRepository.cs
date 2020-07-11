@@ -32,8 +32,6 @@ namespace Restaurant.DataAccess.Data.Repository.Implementation
             if (objFromDb == null) return;
             objFromDb.Name = category.Name;
             objFromDb.DisplayOrder = category.DisplayOrder;
-            _db.SaveChanges();
-
         }
     }
 }

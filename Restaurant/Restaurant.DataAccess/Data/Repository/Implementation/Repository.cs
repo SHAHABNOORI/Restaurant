@@ -24,7 +24,7 @@ namespace Restaurant.DataAccess.Data.Repository.Implementation
             DbSet.Add(entity);
         }
 
-        public async void AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await DbSet.AddAsync(entity);
         }
