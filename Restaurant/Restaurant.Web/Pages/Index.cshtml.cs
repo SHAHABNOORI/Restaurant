@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace Restaurant.Web.Pages
@@ -12,9 +13,6 @@ namespace Restaurant.Web.Pages
             _logger = logger;
         }
 
-        public void OnGet()
-        {
-
-        }
+        public IActionResult OnGet() => RedirectToPage("/Customer/Home/Index");
     }
 }
