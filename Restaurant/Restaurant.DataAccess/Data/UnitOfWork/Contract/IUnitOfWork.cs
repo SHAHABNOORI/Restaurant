@@ -6,11 +6,13 @@ namespace Restaurant.DataAccess.Data.UnitOfWork.Contract
 {
     public interface IUnitOfWork : IDisposable
     {
-        ICategoryRepository CategoryRepository{ get; }
+        ICategoryRepository CategoryRepository { get; }
 
-        IFoodTypeRepository FoodTypeRepository{ get; }
+        IFoodTypeRepository FoodTypeRepository { get; }
 
-        IMenuItemRepository MenuItemRepository{ get; }
+        IMenuItemRepository MenuItemRepository { get; }
+
+        IApplicationUserRepository ApplicationUserRepository { get; }
 
         void Save();
         Task SaveAsync();

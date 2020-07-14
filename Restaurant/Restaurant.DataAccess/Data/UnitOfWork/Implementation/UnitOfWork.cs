@@ -12,10 +12,12 @@ namespace Restaurant.DataAccess.Data.UnitOfWork.Implementation
         public ICategoryRepository CategoryRepository { get; }
         public IFoodTypeRepository FoodTypeRepository { get; }
         public IMenuItemRepository MenuItemRepository { get; }
+        public IApplicationUserRepository ApplicationUserRepository { get; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
+            ApplicationUserRepository = new ApplicationUserRepository(_db);
             MenuItemRepository = new MenuItemRepository(_db);
             FoodTypeRepository = new FoodTypeRepository(_db);
             CategoryRepository = new CategoryRepository(_db);
