@@ -2,15 +2,18 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Web.CodeGeneration.Utils.Messaging;
 using Newtonsoft.Json;
 using Restaurant.DataAccess;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
 using Restaurant.DataAccess.Data.UnitOfWork.Implementation;
+using Restaurant.Web.Helpers;
 
 namespace Restaurant.Web
 {
@@ -30,9 +33,13 @@ namespace Restaurant.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+
+            services.AddSingleton<IEmailSender, CustomEmailSender>();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -42,7 +49,7 @@ namespace Restaurant.Web
             services.AddControllersWithViews().AddRazorRuntimeCompilation().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            }); 
+            });
 
         }
 

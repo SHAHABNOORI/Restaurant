@@ -12,6 +12,8 @@ namespace Restaurant.DataAccess
 
         public DbSet<MenuItem> MenuItems { get; set; }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

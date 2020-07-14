@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Restaurant.DataAccess\Restaurant.DataAccess.csproj" />
+    <ProjectReference Include="..\Restaurant.Utilities\Restaurant.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
