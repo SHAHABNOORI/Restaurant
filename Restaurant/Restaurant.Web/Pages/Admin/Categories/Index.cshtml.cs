@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace Restaurant.Web.Pages.Admin.Categories
+﻿namespace Restaurant.Web.Pages.Admin.Categories
 {
-    public class IndexModel : PageModel
+    //[Authorize(Roles = StaticDetails.ManagerRole)]
+    public class IndexModel : AdminPageModel
     {
         public void OnGet()
         {

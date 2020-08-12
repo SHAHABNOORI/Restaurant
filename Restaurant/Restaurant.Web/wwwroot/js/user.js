@@ -11,21 +11,28 @@ function loadList() {
             "dataType": "json"
         },
         "columns": [
-            { "data": "firstName", "width": "12.5%" },
-            { "data": "lastName", "width": "12.5%" },
+            { "data": "fullName", "width": "25%" },
             { "data": "email", "width": "25%" },
             { "data": "phoneNumber", "width": "25%" },
             {
-                "data": "id",
+                "data": { id: "id", lockoutEnd: "lockoutEnd" },
                 "render": function (data) {
-                    return ` <div class="text-center">
-                                <a href="/Admin/categories/upsert?id=${data}" class="btn btn-success text-white" style="cussor:pointer; width:100px;">
-                                    <i class="far fa-edit"></i> Edit
-                                </a>
-                                <a class="btn btn-danger text-white" style="cursor:pointer; width:100px;" onclick=Delete('/api/applicationUser/${data}')>
-                                    <i class="far fa-trash-alt"></i> Delete
-                                </a>
-                    </div>`;
+                    var today = new Date();
+                    var lockout = new Date(data.lockoutEnd);
+                    if (lockout > today) {
+                        //currently user is locked
+                        return `<div class="text-center">
+                                <a class="btn btn-danger text-white" style="cussor:pointer; width:100px;" onclick=LockUnLock('${
+                            data.id}')>
+                                    <i class="fas fa-lock-open"></i> Unlock
+                                </a><\div>`;
+                    } else {
+                        return `<div class="text-center">
+                                <a class="btn btn-success text-white" style="cussor:pointer; width:100px;" onclick=LockUnLock('${
+                            data.id}')>
+                                    <i class="fas fa-lock"></i> Lock
+                                </a><\div>`;
+                    }
                 }, "width": "25%"
             }
         ],
@@ -36,28 +43,21 @@ function loadList() {
     });
 }
 
-function Delete(url) {
-    swal({
-        title: "Are you sure you want to Delete?",
-        text: "You will not be able to restore the data!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-    }).then((willDelete) => {
-        if (willDelete) {
-            $.ajax({
-                type: 'DELETE',
-                url: url,
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        dataTable.api().ajax.reload();
-                    }
-                    else {
-                        toastr.error(data.message);
-                    }
-                }
-            });
+function LockUnLock(id) {
+
+    $.ajax({
+        type: 'Post',
+        url: '/api/ApplicationUser',
+        data: JSON.stringify(id),
+        contentType: "application/Json",
+        success: function (data) {
+            if (data.success) {
+                toastr.success(data.message);
+                dataTable.api().ajax.reload();
+            }
+            else {
+                toastr.error(data.message);
+            }
         }
     });
 }

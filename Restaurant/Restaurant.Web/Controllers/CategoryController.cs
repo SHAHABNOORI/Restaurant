@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.DataAccess.Data.UnitOfWork.Contract;
+using Restaurant.Utilities;
 
 namespace Restaurant.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = StaticDetails.ManagerRole)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

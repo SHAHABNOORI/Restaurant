@@ -15,7 +15,7 @@ namespace Restaurant.DataAccess.Data.Repository.Implementation
 
         public void Lock(ApplicationUser applicationUser)
         {
-            applicationUser.LockoutEnd= DateTimeOffset.Now;
+            applicationUser.LockoutEnd = DateTimeOffset.Now;
         }
 
         public void UnLock(ApplicationUser applicationUser)
