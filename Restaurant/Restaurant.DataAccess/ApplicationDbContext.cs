@@ -49,6 +49,14 @@ namespace Restaurant.DataAccess
                     .IsRequired();
             });
 
+
+            builder.Entity<ShoppingCart>(entity =>
+            {
+                entity.HasKey(shoppingCart => shoppingCart.Id);
+                entity.HasOne(shoppingCart => shoppingCart.MenuItem);
+                entity.HasOne(shoppingCart => shoppingCart.ApplicationUser);
+            });
+
         }
     }
 }

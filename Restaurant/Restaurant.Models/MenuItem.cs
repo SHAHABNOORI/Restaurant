@@ -14,5 +14,6 @@
         public Category Category { get; set; }
 
         public FoodType FoodType { get; set; }
+        
     }
 }
